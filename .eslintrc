@@ -1,0 +1,14 @@
+{
+  "extends": ["eslint:recommended", "react-app", "plugin:jest/recommended"],
+  "plugins": ["jest", "react-hooks"],
+  "parser": "babel-eslint",
+  "rules": {
+    "no-console": "off",
+    "curly": "warn",
+    "strict": ["error", "global"],
+    "react/prop-types": "warn",
+    "react/react-in-jsx-scope": "off",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
+  }
+}

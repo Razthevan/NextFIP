@@ -13,11 +13,15 @@
     "apollo-link-context": "^1.0.20",
     "graphql": "^15.0.0",
     "next": "9.4",
+    "prop-types": "^15.7.2",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "styled-components": "^5.1.0"
   },
   "devDependencies": {
-    "babel-plugin-styled-components": "^1.8.0"
+    "babel-eslint": "^10.1.0",
+    "babel-plugin-styled-components": "^1.8.0",
+    "eslint": "^7.0.0",
+    "eslint-plugin-react-hooks": "^4.0.2"
   }
 }
