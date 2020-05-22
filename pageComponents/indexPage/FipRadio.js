@@ -52,7 +52,7 @@ const FipRadio = () => {
   }
   const { title, description, webRadios, liveStream } = data.brand;
 
-  const { track } = data.live?.song;
+  const { song } = data?.live;
 
   return (
     <>
@@ -63,12 +63,14 @@ const FipRadio = () => {
         </div>
         <div>
           <figure>
-            <figcaption>
-              Currently playing {track.title} by
-              {track.mainArtists.map((artist) => (
-                <p key={artist}>{artist}</p>
-              ))}
-            </figcaption>
+            {song ? (
+              <figcaption>
+                Currently playing {song.track.title} by
+                {song.track.mainArtists.map((artist) => (
+                  <p key={artist}>{artist}</p>
+                ))}
+              </figcaption>
+            ) : null}
             <audio controls src={liveStream}>
               Your browser does not support the
               <code>audio</code> element.

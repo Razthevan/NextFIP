@@ -27,8 +27,6 @@ const Card = styled.div`
   padding: 1rem;
   text-align: left;
   color: inherit;
-  text-decoration: none;
-  transition: color 0.15s ease, border-color 0.15s ease;
   cursor: default;
   display: flex;
   flex-direction: column;
@@ -42,6 +40,9 @@ const WebRadioTitle = styled.h2`
 
 const WebRadioLogo = styled.img`
   max-width: 200px;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const Grid = styled.div`
