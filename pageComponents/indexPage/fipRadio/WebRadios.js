@@ -1,20 +1,38 @@
+import { useMemo } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
 const propTypes = {
   webRadios: PropTypes.array,
+  onClick: PropTypes.func,
 };
 
-const WebRadios = ({ webRadios }) => {
+const WebRadios = ({ webRadios, onClick }) => {
+  // FIP Metal fails to play
+  const filteredWebRadios = useMemo(
+    () => webRadios.filter((webRadio) => webRadio.id !== "FIP_METAL"),
+    [webRadios]
+  );
   return (
     <Grid>
-      {webRadios.map((webRadio) => (
+      {filteredWebRadios.map((webRadio) => (
         <Card key={webRadio.id}>
           <div>
             <WebRadioTitle id={webRadio.id}>{webRadio.title}</WebRadioTitle>
-            <p>{webRadio.description}</p>
+            <WebRadioDescription>{webRadio.description}</WebRadioDescription>
           </div>
-          <WebRadioLogo src={`${webRadio.id}.jpg`} alt={webRadio.title} />
+          <WebRadioLogo
+            src={`${webRadio.id}.jpg`}
+            alt={webRadio.title}
+            onClick={() => {
+              window.scrollTo({
+                top: 0,
+                left: 0,
+                behavior: "smooth",
+              });
+              onClick(webRadio.liveStream, webRadio.id);
+            }}
+          />
         </Card>
       ))}
     </Grid>
@@ -31,11 +49,16 @@ const Card = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 30vh;
 `;
 
 const WebRadioTitle = styled.h2`
   color: ${(props) => props.theme[props.id]};
+`;
+
+const WebRadioDescription = styled.p`
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const WebRadioLogo = styled.img`
@@ -54,7 +77,7 @@ const Grid = styled.div`
   margin-top: 3rem;
   flex-direction: row;
 
-  @media (max-width: 600px) {
+  @media (max-width: 768px) {
     width: 100%;
     flex-direction: column;
   }
