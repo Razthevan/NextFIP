@@ -13,8 +13,8 @@ const Layout = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 100vh;
   padding: 1rem;
-  max-width: 50%;
   margin: auto;
   @media (max-width: 768px) {
     max-width: 100%;

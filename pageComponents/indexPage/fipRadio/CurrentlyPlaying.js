@@ -1,8 +1,9 @@
 import { useEffect } from "react";
+import { useQuery } from "@apollo/react-hooks";
+
+import moment from "moment";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { useQuery } from "@apollo/react-hooks";
-import moment from "moment";
 
 import CURRENTLY_PLAYING_QUERY from "./currentlyPlaying/currentlyPlaying.query.graphql";
 
@@ -15,7 +16,6 @@ const CurrentlyPlaying = ({ webRadioId, isPlayerPlaying }) => {
   const { loading, error, data, refetch } = useQuery(CURRENTLY_PLAYING_QUERY, {
     variables: { station: webRadioId ? webRadioId : "FIP" },
     skip: !isPlayerPlaying,
-    fetchPolicy: "no-cache",
   });
 
   useEffect(() => {
@@ -33,15 +33,15 @@ const CurrentlyPlaying = ({ webRadioId, isPlayerPlaying }) => {
   }, [data, isPlayerPlaying, refetch]);
 
   if (error || loading || !isPlayerPlaying || !webRadioId) {
-    return null;
+    return <CurrentlyPlayingContainer />;
   }
   const { song } = data.live;
   if (!song) {
-    return null;
+    return <CurrentlyPlayingContainer />;
   }
 
   return (
-    <div>
+    <CurrentlyPlayingContainer>
       <p>
         Currently playing{" "}
         <TrackTitle id={webRadioId}>{song.track.title}</TrackTitle> by
@@ -53,7 +53,7 @@ const CurrentlyPlaying = ({ webRadioId, isPlayerPlaying }) => {
           {convertWebRadioIdToName(webRadioId)}
         </WebRadioName>
       </p>
-    </div>
+    </CurrentlyPlayingContainer>
   );
 };
 
@@ -67,6 +67,11 @@ const WebRadioName = styled.span`
 
 const TrackTitle = styled.span`
   color: ${(props) => props.theme[props.id]};
+`;
+
+const CurrentlyPlayingContainer = styled.div`
+  margin: 10px 0;
+  min-height: 36px;
 `;
 
 CurrentlyPlaying.propTypes = propTypes;
