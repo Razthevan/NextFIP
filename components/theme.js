@@ -21,7 +21,6 @@ const webRadiosColors = {
 export const lightTheme = {
   body: "#FFF",
   text: "#363537",
-  toggleBorder: "#FFF",
   background: "#363537",
   ...webRadiosColors,
 };
@@ -29,6 +28,5 @@ export const darkTheme = {
   body: "#363537",
   text: "#FAFAFA",
   background: "#999",
-  toggleBorder: "#6B8096",
   ...webRadiosColors,
 };

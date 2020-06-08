@@ -10,12 +10,13 @@ const IndexPage = () => (
 export default IndexPage;
 
 const Layout = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100vh;
-  padding: 1rem;
   margin: auto;
+  display: flex;
+  padding: 1rem;
+  height: 100vh;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
   @media (max-width: 768px) {
     max-width: 100%;
   }

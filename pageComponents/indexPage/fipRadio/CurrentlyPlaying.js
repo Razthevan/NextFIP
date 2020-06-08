@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useQuery } from "@apollo/react-hooks";
-
 import moment from "moment";
 import PropTypes from "prop-types";
 import styled from "styled-components";
@@ -15,7 +14,7 @@ const propTypes = {
 const CurrentlyPlaying = ({ webRadioId, isPlayerPlaying }) => {
   const { loading, error, data, refetch } = useQuery(CURRENTLY_PLAYING_QUERY, {
     variables: { station: webRadioId ? webRadioId : "FIP" },
-    skip: !isPlayerPlaying,
+    skip: !isPlayerPlaying || !webRadioId,
   });
 
   useEffect(() => {

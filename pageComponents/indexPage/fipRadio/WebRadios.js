@@ -1,8 +1,11 @@
 import { useMemo, useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import styled from "styled-components";
+import styled, { withTheme } from "styled-components";
 
-import { LeftArrow, RightArrow } from "../../../components/Arrows";
+import Card from "@material-ui/core/Card";
+import Grid from "@material-ui/core/Grid";
+import ChevronLeftSharpIcon from "@material-ui/icons/ChevronLeftSharp";
+import ChevronRightSharpIcon from "@material-ui/icons/ChevronRightSharp";
 
 const propTypes = {
   onClick: PropTypes.func,
@@ -29,22 +32,20 @@ const WebRadios = ({ onClick, webRadios, activeWebRadioId }) => {
         ]),
     [webRadios]
   );
-  const [currentWebRadioIndex, updateCurrentWebRadioIndex] = useState(() => {
-    return activeWebRadioId
-      ? filteredWebRadios.findIndex(
-          (webRadio) => webRadio.id === activeWebRadioId
-        )
-      : 1;
-  });
+  const [currentWebRadioIndex, updateCurrentWebRadioIndex] = useState(() =>
+    filteredWebRadios.findIndex((webRadio) => webRadio.id === activeWebRadioId)
+  );
 
   useEffect(() => {
-    if (activeWebRadioId) {
-      updateCurrentWebRadioIndex(
-        filteredWebRadios.findIndex(
-          (webRadio) => webRadio.id === activeWebRadioId
-        )
-      );
+    if (!activeWebRadioId) {
+      return;
     }
+    console.log("activeWebRadioId: ", activeWebRadioId);
+    updateCurrentWebRadioIndex(
+      filteredWebRadios.findIndex(
+        (webRadio) => webRadio.id === activeWebRadioId
+      )
+    );
   }, [activeWebRadioId]);
 
   const onArrowClick = (direction) => {
@@ -72,45 +73,51 @@ const WebRadios = ({ onClick, webRadios, activeWebRadioId }) => {
   }
 
   return (
-    <Card>
-      <ArrowContainer onClick={() => onArrowClick(LEFT)}>
-        <LeftArrow />
-      </ArrowContainer>
-      <WebRadioInformationContainer>
-        <div>
-          <WebRadioTitle id={activeWebRadioInformation.id}>
-            {activeWebRadioInformation.title}
-          </WebRadioTitle>
-          <WebRadioDescription>
-            {activeWebRadioInformation.description}
-          </WebRadioDescription>
-        </div>
-        <WebRadioLogo
-          src={`${activeWebRadioInformation.id}.jpg`}
-          alt={activeWebRadioInformation.title}
-          onClick={() => {
-            onClick(
-              activeWebRadioInformation.liveStream,
-              activeWebRadioInformation.id
-            );
-          }}
+    <Grid container direction={"row"} alignItems={"center"}>
+      <Grid item xs={1} container justify={"center"} alignContent={"center"}>
+        <ChevronLeftSharpIcon
+          style={{ fontSize: 60 }}
+          onClick={() => onArrowClick(LEFT)}
         />
-      </WebRadioInformationContainer>
-      <ArrowContainer onClick={() => onArrowClick()}>
-        <RightArrow />
-      </ArrowContainer>
-    </Card>
+      </Grid>
+      <Grid item xs={10}>
+        <StyledCard raised>
+          <WebRadioInformationContainer>
+            <div>
+              <WebRadioTitle id={activeWebRadioInformation.id}>
+                {activeWebRadioInformation.title}
+              </WebRadioTitle>
+              <WebRadioDescription>
+                {activeWebRadioInformation.description}
+              </WebRadioDescription>
+            </div>
+            <WebRadioLogo
+              src={`${activeWebRadioInformation.id}.jpg`}
+              alt={activeWebRadioInformation.title}
+              onClick={() => {
+                onClick(
+                  activeWebRadioInformation.liveStream,
+                  activeWebRadioInformation.id
+                );
+              }}
+            />
+          </WebRadioInformationContainer>
+        </StyledCard>
+      </Grid>
+      <Grid item xs={1} container justify={"center"} alignContent={"center"}>
+        <ChevronRightSharpIcon
+          style={{ fontSize: 60 }}
+          onClick={() => onArrowClick()}
+        />
+      </Grid>
+    </Grid>
   );
 };
 
-const Card = styled.div`
-  display: flex;
-  color: inherit;
-  cursor: default;
-  text-align: left;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+const StyledCard = styled(Card)`
+  color: ${(props) => props.theme.text} !important;
+  padding: 10px;
+  background-color: ${(props) => props.theme.body} !important;
 `;
 
 const WebRadioInformationContainer = styled.div`
@@ -119,9 +126,6 @@ const WebRadioInformationContainer = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  &:hover {
-    cursor: pointer;
-  }
 `;
 
 const WebRadioTitle = styled.h2`
@@ -138,10 +142,7 @@ const WebRadioDescription = styled.p`
 
 const WebRadioLogo = styled.img`
   max-width: 200px;
-`;
 
-const ArrowContainer = styled.div`
-  flex: 0 1 15%;
   &:hover {
     cursor: pointer;
   }
@@ -149,4 +150,4 @@ const ArrowContainer = styled.div`
 
 WebRadios.propTypes = propTypes;
 
-export default WebRadios;
+export default withTheme(WebRadios);
