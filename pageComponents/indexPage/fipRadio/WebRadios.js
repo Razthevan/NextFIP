@@ -40,7 +40,7 @@ const WebRadios = ({ onClick, webRadios, activeWebRadioId }) => {
     if (!activeWebRadioId) {
       return;
     }
-    console.log("activeWebRadioId: ", activeWebRadioId);
+
     updateCurrentWebRadioIndex(
       filteredWebRadios.findIndex(
         (webRadio) => webRadio.id === activeWebRadioId
