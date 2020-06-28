@@ -3,13 +3,14 @@ import ApolloClient from "apollo-client";
 import { createHttpLink } from "apollo-link-http";
 import { InMemoryCache } from "apollo-cache-inmemory";
 
-const URI = "https://openapi.radiofrance.fr/v1/graphql?x-token=";
+const URI = "https://spotifip.herokuapp.com/";
+// const URI = "http://localhost:4000/graphql";
 
 export default new ApolloClient({
   link: createHttpLink({
-    uri: `${URI}${process.env.NEXT_PUBLIC_TOKEN}`,
-    headers: {
-      "x-token": process.env.NEXT_PUBLIC_TOKEN,
+    uri: URI,
+    fetchOptions: {
+      credentials: "include",
     },
   }),
   cache: new InMemoryCache(),

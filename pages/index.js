@@ -1,4 +1,5 @@
 import Head from "next/head";
+import dynamic from "next/dynamic";
 import apolloClient from "../graphql/client";
 import { ApolloProvider } from "@apollo/react-hooks";
 import styled, { ThemeProvider } from "styled-components";
@@ -7,6 +8,10 @@ import GithubIcon from "../components/GithubIcon";
 import GlobalStyle from "../components/GlobalStyle";
 import IndexPage from "../pageComponents/IndexPage";
 import LinkedInIcon from "../components/LinkedInIcon";
+const ChromecastButton = dynamic(
+  () => import("../components/ChromecastButton"),
+  { ssr: false }
+);
 
 import { lightTheme, darkTheme } from "../components/theme";
 import useDarkTheme, { LIGHT_THEME } from "../hooks/useDarkTheme";
@@ -21,11 +26,13 @@ const App = () => {
       <Head>
         <title>NextFIP</title>
         <link rel="icon" href="/fip.svg" />
+        <script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
       </Head>
       <ApolloProvider client={apolloClient}>
         <ThemeProvider theme={theme}>
           <FixedContainer>
             <RelativeDiv>
+              {/* <ChromecastButton /> */}
               <FlexLink
                 target="_blank"
                 href={
@@ -40,7 +47,6 @@ const App = () => {
               >
                 <GithubIcon />
               </FlexLink>
-
               <ThemeSwitcher onClick={toggleThemeMode}>
                 {isLightTheme ? "☀️" : "🌙"}
               </ThemeSwitcher>
@@ -74,6 +80,7 @@ const RelativeDiv = styled.div`
 const FixedContainer = styled.div`
   top: 10px;
   right: 30px;
+  /* width: 150px; */
   position: fixed;
 `;
 

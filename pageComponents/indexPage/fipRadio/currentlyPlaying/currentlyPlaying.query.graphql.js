@@ -20,6 +20,23 @@ export default gql`
           albumTitle
           productionDate
           performers
+          metadata {
+            name
+            spotifyUrl
+            albumInfo {
+              albumName
+              albumImages {
+                width
+                height
+                url
+              }
+              albumReleaseDate
+              albumLink
+            }
+            artistsInfo {
+              name
+            }
+          }
         }
       }
     }
