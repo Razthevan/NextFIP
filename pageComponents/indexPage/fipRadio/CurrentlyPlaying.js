@@ -4,6 +4,8 @@ import moment from "moment";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
+import SpotifyLink from "./currentlyPlaying/SpotifyLink";
+
 import CURRENTLY_PLAYING_QUERY from "./currentlyPlaying/currentlyPlaying.query.graphql";
 
 const propTypes = {
@@ -35,6 +37,7 @@ const CurrentlyPlaying = ({ webRadioId, isPlayerPlaying }) => {
     return <CurrentlyPlayingContainer />;
   }
   const { song } = data.live;
+
   if (!song) {
     return <CurrentlyPlayingContainer />;
   }
@@ -52,6 +55,7 @@ const CurrentlyPlaying = ({ webRadioId, isPlayerPlaying }) => {
           {convertWebRadioIdToName(webRadioId)}
         </WebRadioName>
       </p>
+      <SpotifyLink spotifyLink={song.track?.metadata?.spotifyUrl} />
     </CurrentlyPlayingContainer>
   );
 };
@@ -71,6 +75,11 @@ const TrackTitle = styled.span`
 const CurrentlyPlayingContainer = styled.div`
   margin: 10px 0;
   min-height: 36px;
+  display: flex;
+  align-items: center;
+  @media (max-width: 768px) {
+    margin-bottom: 50px;
+  }
 `;
 
 CurrentlyPlaying.propTypes = propTypes;
