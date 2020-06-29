@@ -58,10 +58,7 @@ const App = () => {
               >
                 <LinkedInIcon />
               </FlexLink>
-              <FlexLink
-                target="_blank"
-                href={"https://github.com/Razthevan/NextFIP"}
-              >
+              <FlexLink target="_blank" href={"https://github.com/Razthevan"}>
                 <GithubIcon />
               </FlexLink>
               <ThemeSwitcher onClick={toggleThemeMode}>
