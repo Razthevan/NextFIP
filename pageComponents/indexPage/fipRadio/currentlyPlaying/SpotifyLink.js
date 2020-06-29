@@ -15,5 +15,5 @@ export default SpotifyLink;
 
 const Logo = styled.img`
   height: 40px;
-  margin-left: 20px;
+  margin: 20px 0 20px 20px;
 `;

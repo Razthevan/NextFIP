@@ -16,15 +16,12 @@ const propTypes = {
 };
 
 const CurrentlyPlaying = ({ webRadioId, isPlayerPlaying }) => {
-  const { setCurrentTrackMetadata } = useContext(MetadataContext);
-
   const { loading, error, data, refetch } = useQuery(CURRENTLY_PLAYING_QUERY, {
     variables: { station: webRadioId ? webRadioId : "FIP" },
     skip: !isPlayerPlaying || !webRadioId,
-    onCompleted: (data) => {
-      setCurrentTrackMetadata(data?.live?.song?.track?.metadata);
-    },
   });
+
+  const { setCurrentTrackMetadata } = useContext(MetadataContext);
 
   useEffect(() => {
     if (!isPlayerPlaying) {
@@ -39,6 +36,10 @@ const CurrentlyPlaying = ({ webRadioId, isPlayerPlaying }) => {
     }, pollingInterval);
     return () => clearTimeout(fetchDataTimeout);
   }, [data, isPlayerPlaying, refetch]);
+
+  useEffect(() => {
+    setCurrentTrackMetadata(data?.live?.song?.track?.metadata);
+  }, [data]);
 
   if (error || loading || !isPlayerPlaying || !webRadioId) {
     return <CurrentlyPlayingContainer />;
