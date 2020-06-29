@@ -1,4 +1,5 @@
 const fip = "FIP";
+const fipPop = "FIP_POP";
 const fipRock = "FIP_ROCK";
 const fipJazz = "FIP_JAZZ";
 const fipWorld = "FIP_WORLD";
@@ -9,6 +10,7 @@ const fipNouveautes = "FIP_NOUVEAUTES";
 
 const webRadiosColors = {
   [fip]: "#E2007A",
+  [fipPop]: "orange",
   [fipRock]: "#f93446",
   [fipJazz]: "#13898d",
   [fipWorld]: "#EFA439",

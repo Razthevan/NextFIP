@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 import styled, { withTheme } from "styled-components";
 
@@ -6,6 +6,8 @@ import Card from "@material-ui/core/Card";
 import Grid from "@material-ui/core/Grid";
 import ChevronLeftSharpIcon from "@material-ui/icons/ChevronLeftSharp";
 import ChevronRightSharpIcon from "@material-ui/icons/ChevronRightSharp";
+
+import MetadataContext from "./metadataContext";
 
 const propTypes = {
   onClick: PropTypes.func,
@@ -16,6 +18,8 @@ const propTypes = {
 const LEFT = "left";
 
 const WebRadios = ({ onClick, webRadios, activeWebRadioId }) => {
+  const { metadata, setCurrentTrackMetadata } = useContext(MetadataContext);
+
   // FIP Metal fails to play
   const filteredWebRadios = useMemo(
     () =>
@@ -72,6 +76,11 @@ const WebRadios = ({ onClick, webRadios, activeWebRadioId }) => {
     return null;
   }
 
+  const webRadioImageURL =
+    activeWebRadioId === activeWebRadioInformation.id && metadata
+      ? metadata?.albumInfo?.albumImages[1].url
+      : `${activeWebRadioInformation.id}.jpg`;
+
   return (
     <Grid container direction={"row"} alignItems={"center"}>
       <Grid item xs={1} container justify={"center"} alignContent={"center"}>
@@ -83,24 +92,20 @@ const WebRadios = ({ onClick, webRadios, activeWebRadioId }) => {
       <Grid item xs={10}>
         <StyledCard raised>
           <WebRadioInformationContainer>
-            <div>
-              <WebRadioTitle id={activeWebRadioInformation.id}>
-                {activeWebRadioInformation.title}
-              </WebRadioTitle>
-              <WebRadioDescription>
-                {activeWebRadioInformation.description}
-              </WebRadioDescription>
-            </div>
-            <WebRadioLogo
-              src={`${activeWebRadioInformation.id}.jpg`}
+            <WebRadioImage
+              src={webRadioImageURL}
               alt={activeWebRadioInformation.title}
               onClick={() => {
+                setCurrentTrackMetadata(null);
                 onClick(
                   activeWebRadioInformation.liveStream,
                   activeWebRadioInformation.id
                 );
               }}
             />
+            <WebRadioTitle id={activeWebRadioInformation.id}>
+              {activeWebRadioInformation.title}
+            </WebRadioTitle>
           </WebRadioInformationContainer>
         </StyledCard>
       </Grid>
@@ -121,7 +126,6 @@ const StyledCard = styled(Card)`
 `;
 
 const WebRadioInformationContainer = styled.div`
-  margin: 5px;
   flex: 0 1 70%;
   display: flex;
   align-items: center;
@@ -130,18 +134,11 @@ const WebRadioInformationContainer = styled.div`
 
 const WebRadioTitle = styled.h2`
   color: ${(props) => props.theme[props.id]};
-  margin-bottom: 10px;
+  margin: 10px 0;
 `;
 
-const WebRadioDescription = styled.p`
-  margin-bottom: 10px;
-  @media (max-width: 768px) {
-    display: none;
-  }
-`;
-
-const WebRadioLogo = styled.img`
-  max-width: 200px;
+const WebRadioImage = styled.img`
+  width: 300px;
 
   &:hover {
     cursor: pointer;

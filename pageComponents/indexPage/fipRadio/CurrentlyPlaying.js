@@ -1,9 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import { useQuery } from "@apollo/react-hooks";
+
 import moment from "moment";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
+import MetadataContext from "./metadataContext";
 import SpotifyLink from "./currentlyPlaying/SpotifyLink";
 
 import CURRENTLY_PLAYING_QUERY from "./currentlyPlaying/currentlyPlaying.query.graphql";
@@ -14,9 +16,14 @@ const propTypes = {
 };
 
 const CurrentlyPlaying = ({ webRadioId, isPlayerPlaying }) => {
+  const { setCurrentTrackMetadata } = useContext(MetadataContext);
+
   const { loading, error, data, refetch } = useQuery(CURRENTLY_PLAYING_QUERY, {
     variables: { station: webRadioId ? webRadioId : "FIP" },
     skip: !isPlayerPlaying || !webRadioId,
+    onCompleted: (data) => {
+      setCurrentTrackMetadata(data?.live?.song?.track?.metadata);
+    },
   });
 
   useEffect(() => {

@@ -3,8 +3,11 @@ import { useQuery } from "@apollo/react-hooks";
 import styled from "styled-components";
 
 import WebRadios from "./fipRadio/WebRadios";
+import useMetadata from "../../hooks/useMetadata";
+import MetadataContext from "./fipRadio/metadataContext";
 import CurrentlyPlaying from "./fipRadio/CurrentlyPlaying";
 import FIP_WEB_RADIOS from "./fipRadio/webRadios.query.graphql";
+
 import Grid from "@material-ui/core/Grid";
 import Slider from "@material-ui/core/Slider";
 import VolumeUp from "@material-ui/icons/VolumeUp";
@@ -14,7 +17,7 @@ import PlayArrowTwoToneIcon from "@material-ui/icons/PlayArrowTwoTone";
 
 const FipRadio = () => {
   const audioElementRef = useRef(null);
-
+  const metadata = useMetadata();
   const [activeWebRadioId, setActiveWebRadioId] = useState(null);
   const [isPlayerPlaying, updateIsPlayerPlaying] = useState(false);
   const [activeWebRadioSource, setActiveWebRadioSource] = useState(null);
@@ -64,97 +67,117 @@ const FipRadio = () => {
   const pauseAudio = () => audioElementRef.current.pause();
   const togglePlayerStatus = (status) => updateIsPlayerPlaying(status);
   return (
-    <Grid container direction={"row"} alignItems="center" wrap={"wrap"}>
-      <Grid item sm={6} xs={12}>
-        <a
-          target="_blank"
-          href="https://www.fip.fr/"
-          title="You should definitely give FIP a try"
-        >
-          <RadioLogo src="/fip.svg" alt={title} />
-        </a>
-        <p>{description}</p>
-        <audio
-          ref={audioElementRef}
-          src={activeWebRadioSource}
-          onPlay={() => togglePlayerStatus(true)}
-          onPause={() => togglePlayerStatus(false)}
-        >
-          Your browser does not support the
-          <code>audio</code> element.
-        </audio>
+    <MetadataContext.Provider value={metadata}>
+      <Grid container direction={"row"} alignItems="center" wrap={"wrap"}>
+        <Grid item sm={6} xs={12}>
+          <a
+            target="_blank"
+            href="https://www.fip.fr/"
+            title="You should definitely give FIP a try"
+          >
+            <RadioLogo src="/fip.svg" alt={title} />
+          </a>
+          <p>{description}</p>
+          <audio
+            ref={audioElementRef}
+            src={activeWebRadioSource}
+            onPlay={() => togglePlayerStatus(true)}
+            onPause={() => togglePlayerStatus(false)}
+          >
+            Your browser does not support the
+            <code>audio</code> element.
+          </audio>
 
-        <Grid
-          item
-          xs={12}
-          container
-          spacing={1}
-          alignItems={"center"}
-          justify={"space-between"}
-        >
           <Grid
             item
-            xs={1}
+            xs={12}
             container
-            alignItems={"center"}
-            justify={"center"}
             spacing={1}
+            alignItems={"center"}
+            justify={"space-between"}
           >
-            {isPlayerPlaying ? (
-              <PauseTwoToneIcon fontSize={"large"} onClick={pauseAudio} />
-            ) : (
-              <PlayArrowTwoToneIcon fontSize={"large"} onClick={playAudio} />
-            )}
+            <Grid
+              item
+              xs={1}
+              container
+              alignItems={"center"}
+              justify={"center"}
+              spacing={1}
+            >
+              {isPlayerPlaying ? (
+                <PauseTwoToneIcon fontSize={"large"} onClick={pauseAudio} />
+              ) : (
+                <PlayArrowTwoToneIcon fontSize={"large"} onClick={playAudio} />
+              )}
+            </Grid>
+            <Grid
+              xs={1}
+              item
+              container
+              alignItems={"center"}
+              justify={"center"}
+            >
+              <VolumeDown fontSize={"large"} />
+            </Grid>
+            <Grid
+              xs={8}
+              item
+              container
+              justify={"center"}
+              alignContent={"center"}
+            >
+              <StyledSlider
+                min={0}
+                max={1}
+                step={0.1}
+                defaultValue={1}
+                onChange={(_, value) => {
+                  audioElementRef.current.volume = value;
+                }}
+                activewebradioid={activeWebRadioId}
+              />
+            </Grid>
+            <Grid
+              xs={1}
+              item
+              container
+              justify={"center"}
+              alignContent={"center"}
+            >
+              <VolumeUp fontSize={"large"} />
+            </Grid>
           </Grid>
-          <Grid xs={1} item container alignItems={"center"} justify={"center"}>
-            <VolumeDown fontSize={"large"} />
-          </Grid>
-          <Grid
-            xs={8}
-            item
-            container
-            justify={"center"}
-            alignContent={"center"}
-          >
-            <Slider
-              marks
-              min={0}
-              max={1}
-              step={0.1}
-              defaultValue={1}
-              onChange={(_, value) => {
-                audioElementRef.current.volume = value;
-              }}
-            />
-          </Grid>
-          <Grid
-            xs={1}
-            item
-            container
-            justify={"center"}
-            alignContent={"center"}
-          >
-            <VolumeUp fontSize={"large"} />
-          </Grid>
+          <CurrentlyPlaying
+            webRadioId={activeWebRadioId}
+            isPlayerPlaying={isPlayerPlaying}
+          />
         </Grid>
-        <CurrentlyPlaying
-          webRadioId={activeWebRadioId}
-          isPlayerPlaying={isPlayerPlaying}
-        />
+        <Grid item sm={6} xs={12}>
+          <WebRadios
+            webRadios={webRadios}
+            activeWebRadioId={activeWebRadioId}
+            onClick={updateRadioInformationAndPlay}
+          />
+        </Grid>
       </Grid>
-      <Grid item sm={6} xs={12}>
-        <WebRadios
-          webRadios={webRadios}
-          activeWebRadioId={activeWebRadioId}
-          onClick={updateRadioInformationAndPlay}
-        />
-      </Grid>
-    </Grid>
+    </MetadataContext.Provider>
   );
 };
-
-export default FipRadio;
 
 const RadioLogo = styled.img`
   width: 25%;
 `;
+
+const StyledSlider = styled(Slider)`
+  > .MuiSlider-rail {
+    background-color: ${(props) => props.theme[props.activewebradioid]};
+  }
+  > .MuiSlider-track {
+    background-color: ${(props) => props.theme[props.activewebradioid]};
+  }
+  > .MuiSlider-thumb {
+    background-color: ${(props) => props.theme[props.activewebradioid]};
+  }
+`;
+
+export default FipRadio;
