@@ -82,7 +82,7 @@ const WebRadios = ({ onClick, webRadios, activeWebRadioId }) => {
       : `${activeWebRadioInformation.id}.jpg`;
 
   return (
-    <Grid container direction={"row"} alignItems={"center"}>
+    <Grid container direction={"row"} alignItems={"center"} spacing={3}>
       <Grid item xs={1} container justify={"center"} alignContent={"center"}>
         <ChevronLeftSharpIcon
           style={{ fontSize: 60 }}
@@ -90,7 +90,7 @@ const WebRadios = ({ onClick, webRadios, activeWebRadioId }) => {
         />
       </Grid>
       <Grid item xs={10}>
-        <StyledCard raised>
+        <StyledCard>
           <WebRadioInformationContainer>
             <WebRadioImage
               src={webRadioImageURL}

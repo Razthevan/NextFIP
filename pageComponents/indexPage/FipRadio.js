@@ -68,96 +68,109 @@ const FipRadio = () => {
   const togglePlayerStatus = (status) => updateIsPlayerPlaying(status);
   return (
     <MetadataContext.Provider value={metadata}>
-      <Grid container direction={"row"} alignItems="center" wrap={"wrap"}>
-        <Grid item sm={6} xs={12}>
-          <a
-            target="_blank"
-            href="https://www.fip.fr/"
-            title="You should definitely give FIP a try"
-          >
-            <RadioLogo src="/fip.svg" alt={title} />
-          </a>
-          <p>{description}</p>
-          <audio
-            ref={audioElementRef}
-            src={activeWebRadioSource}
-            onPlay={() => togglePlayerStatus(true)}
-            onPause={() => togglePlayerStatus(false)}
-          >
-            Your browser does not support the
-            <code>audio</code> element.
-          </audio>
+      <Grid container direction="row" alignItems="center" justify="center">
+        <Grid
+          item
+          container
+          md={8}
+          sm={12}
+          spacing={1}
+          wrap={"wrap"}
+          direction={"row"}
+          alignItems="center"
+        >
+          <Grid item sm={6} xs={12}>
+            <a
+              target="_blank"
+              href="https://www.fip.fr/"
+              title="You should definitely give FIP a try"
+            >
+              <RadioLogo src="/fip.svg" alt={title} />
+            </a>
+            <p>{description}</p>
+            <audio
+              ref={audioElementRef}
+              src={activeWebRadioSource}
+              onPlay={() => togglePlayerStatus(true)}
+              onPause={() => togglePlayerStatus(false)}
+            >
+              Your browser does not support the
+              <code>audio</code> element.
+            </audio>
 
-          <Grid
-            item
-            xs={12}
-            container
-            spacing={1}
-            alignItems={"center"}
-            justify={"space-between"}
-          >
             <Grid
               item
-              xs={1}
+              xs={12}
               container
-              alignItems={"center"}
-              justify={"center"}
               spacing={1}
-            >
-              {isPlayerPlaying ? (
-                <PauseTwoToneIcon fontSize={"large"} onClick={pauseAudio} />
-              ) : (
-                <PlayArrowTwoToneIcon fontSize={"large"} onClick={playAudio} />
-              )}
-            </Grid>
-            <Grid
-              xs={1}
-              item
-              container
               alignItems={"center"}
-              justify={"center"}
+              justify={"space-between"}
             >
-              <VolumeDown fontSize={"large"} />
+              <Grid
+                item
+                xs={1}
+                container
+                alignItems={"center"}
+                justify={"center"}
+              >
+                {isPlayerPlaying ? (
+                  <PauseTwoToneIcon fontSize={"large"} onClick={pauseAudio} />
+                ) : (
+                  <PlayArrowTwoToneIcon
+                    fontSize={"large"}
+                    onClick={playAudio}
+                  />
+                )}
+              </Grid>
+              <Grid
+                xs={1}
+                item
+                container
+                alignItems={"center"}
+                justify={"center"}
+              >
+                <VolumeDown fontSize={"large"} />
+              </Grid>
+              <Grid
+                xs={8}
+                item
+                container
+                justify={"center"}
+                alignContent={"center"}
+              >
+                <StyledSlider
+                  min={0}
+                  max={1}
+                  step={0.1}
+                  defaultValue={1}
+                  onChange={(_, value) => {
+                    audioElementRef.current.volume = value;
+                  }}
+                  activewebradioid={activeWebRadioId}
+                />
+              </Grid>
+              <Grid
+                xs={1}
+                item
+                container
+                justify={"center"}
+                alignContent={"center"}
+              >
+                <VolumeUp fontSize={"large"} />
+              </Grid>
             </Grid>
-            <Grid
-              xs={8}
-              item
-              container
-              justify={"center"}
-              alignContent={"center"}
-            >
-              <StyledSlider
-                min={0}
-                max={1}
-                step={0.1}
-                defaultValue={1}
-                onChange={(_, value) => {
-                  audioElementRef.current.volume = value;
-                }}
-                activewebradioid={activeWebRadioId}
-              />
-            </Grid>
-            <Grid
-              xs={1}
-              item
-              container
-              justify={"center"}
-              alignContent={"center"}
-            >
-              <VolumeUp fontSize={"large"} />
-            </Grid>
+            <CurrentlyPlaying
+              webRadioId={activeWebRadioId}
+              isPlayerPlaying={isPlayerPlaying}
+            />
           </Grid>
-          <CurrentlyPlaying
-            webRadioId={activeWebRadioId}
-            isPlayerPlaying={isPlayerPlaying}
-          />
-        </Grid>
-        <Grid item sm={6} xs={12}>
-          <WebRadios
-            webRadios={webRadios}
-            activeWebRadioId={activeWebRadioId}
-            onClick={updateRadioInformationAndPlay}
-          />
+          <Grid item sm={6} xs={12}>
+            <WebRadios
+              webRadios={webRadios}
+              activeWebRadioId={activeWebRadioId}
+              onClick={updateRadioInformationAndPlay}
+            />
+          </Grid>
         </Grid>
       </Grid>
     </MetadataContext.Provider>
