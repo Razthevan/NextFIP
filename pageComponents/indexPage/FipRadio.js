@@ -129,7 +129,7 @@ const FipRadio = () => {
                 alignItems={"center"}
                 justify={"center"}
               >
-                <VolumeDown fontSize={"large"} />
+                <VolumeDown />
               </Grid>
               <Grid
                 xs={8}
@@ -156,7 +156,7 @@ const FipRadio = () => {
                 justify={"center"}
                 alignContent={"center"}
               >
-                <VolumeUp fontSize={"large"} />
+                <VolumeUp />
               </Grid>
             </Grid>
             <CurrentlyPlaying

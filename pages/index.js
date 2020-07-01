@@ -8,6 +8,7 @@ import GithubIcon from "../components/GithubIcon";
 import GlobalStyle from "../components/GlobalStyle";
 import IndexPage from "../pageComponents/IndexPage";
 import LinkedInIcon from "../components/LinkedInIcon";
+import GraphQLIcon from "../components/GraphQLIcon";
 const ChromecastButton = dynamic(
   () => import("../components/ChromecastButton"),
   { ssr: false }
@@ -61,6 +62,12 @@ const App = () => {
               <FlexLink target="_blank" href={"https://github.com/Razthevan"}>
                 <GithubIcon />
               </FlexLink>
+              <FlexLink
+                target="_blank"
+                href={"https://github.com/Razthevan/spotifip"}
+              >
+                <GraphQLIcon />
+              </FlexLink>
               <ThemeSwitcher onClick={toggleThemeMode}>
                 {isLightTheme ? "☀️" : "🌙"}
               </ThemeSwitcher>
@@ -85,7 +92,6 @@ const ThemeSwitcher = styled.span`
 
 const RelativeDiv = styled.div`
   display: flex;
-  min-width: 100px;
   position: relative;
   align-items: center;
   justify-content: space-between;
@@ -94,7 +100,7 @@ const RelativeDiv = styled.div`
 const FixedContainer = styled.div`
   top: 10px;
   right: 30px;
-  /* width: 150px; */
+  width: 150px;
   position: fixed;
 `;
 
