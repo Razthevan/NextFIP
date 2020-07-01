@@ -32,16 +32,34 @@ const FipRadio = () => {
 
   if (loading)
     return (
-      <Grid container direction={"row"} alignItems="center" wrap={"wrap"}>
-        <Grid item sm={6} xs={12}>
+      <Grid container direction="row" alignItems="center" justify="center">
+        <Grid
+          item
+          container
+          md={8}
+          sm={12}
+          spacing={1}
+          wrap={"wrap"}
+          direction={"row"}
+          alignItems="center"
+        >
           <p>Loading...</p>
         </Grid>
       </Grid>
     );
   if (error) {
     return (
-      <Grid container direction={"row"} alignItems="center" wrap={"wrap"}>
-        <Grid item sm={6} xs={12}>
+      <Grid container direction="row" alignItems="center" justify="center">
+        <Grid
+          item
+          container
+          md={8}
+          sm={12}
+          spacing={1}
+          wrap={"wrap"}
+          direction={"row"}
+          alignItems="center"
+        >
           <p>Error :(</p>
         </Grid>
       </Grid>

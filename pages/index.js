@@ -59,14 +59,17 @@ const App = () => {
               >
                 <LinkedInIcon />
               </FlexLink>
-              <FlexLink target="_blank" href={"https://github.com/Razthevan"}>
-                <GithubIcon />
-              </FlexLink>
               <FlexLink
                 target="_blank"
                 href={"https://github.com/Razthevan/spotifip"}
               >
                 <GraphQLIcon />
+              </FlexLink>
+              <FlexLink
+                target="_blank"
+                href={"https://github.com/Razthevan/NextFIP"}
+              >
+                <GithubIcon />
               </FlexLink>
               <ThemeSwitcher onClick={toggleThemeMode}>
                 {isLightTheme ? "☀️" : "🌙"}
