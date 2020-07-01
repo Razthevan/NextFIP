@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 import WebRadios from "./fipRadio/WebRadios";
 import useMetadata from "../../hooks/useMetadata";
+import MovingText from "../../components/MovingText";
 import MetadataContext from "./fipRadio/metadataContext";
 import CurrentlyPlaying from "./fipRadio/CurrentlyPlaying";
 import FIP_WEB_RADIOS from "./fipRadio/webRadios.query.graphql";
@@ -16,39 +17,49 @@ import PauseTwoToneIcon from "@material-ui/icons/PauseTwoTone";
 import PlayArrowTwoToneIcon from "@material-ui/icons/PlayArrowTwoTone";
 
 const FipRadio = () => {
-  const audioElementRef = useRef(null);
   const metadata = useMetadata();
+  const audioElementRef = useRef(null);
+  const [loading, updateLoadingStatus] = useState(true);
   const [activeWebRadioId, setActiveWebRadioId] = useState(null);
   const [isPlayerPlaying, updateIsPlayerPlaying] = useState(false);
   const [activeWebRadioSource, setActiveWebRadioSource] = useState(null);
-
-  const { loading, error, data } = useQuery(FIP_WEB_RADIOS, {
-    onCompleted: (data) => {
-      const { webRadios } = data.brand;
-      const fipJazz = webRadios.find((webRadio) => webRadio.id === "FIP_JAZZ");
-      updateWebRadioInformation(fipJazz.liveStream, fipJazz.id);
-    },
-  });
-
-  if (loading)
-    return (
-      <Container>
-        <p>Loading...</p>
-      </Container>
-    );
-  if (error) {
-    return (
-      <Container>
-        <p>Error :(</p>
-      </Container>
-    );
-  }
-  const { title, description, webRadios } = data.brand;
 
   const updateWebRadioInformation = (activeWebRadioSource, webRadioId) => {
     setActiveWebRadioSource(activeWebRadioSource);
     setActiveWebRadioId(webRadioId);
   };
+
+  const updateLoadingStatusTimeout = (status) => {
+    const loadingTimeout = setTimeout(() => {
+      updateLoadingStatus(status);
+    }, 3000);
+    return () => clearTimeout(loadingTimeout);
+  };
+
+  const { error, data } = useQuery(FIP_WEB_RADIOS, {
+    onCompleted: (data) => {
+      const { webRadios } = data.brand;
+      const fipJazz = webRadios.find((webRadio) => webRadio.id === "FIP_JAZZ");
+      updateLoadingStatusTimeout(false);
+      updateWebRadioInformation(fipJazz.liveStream, fipJazz.id);
+    },
+  });
+
+  if (loading) {
+    return (
+      <Container>
+        <MovingText text="LOADING..." role="heading" />
+      </Container>
+    );
+  }
+  if (error) {
+    return (
+      <Container>
+        <MovingText text="Error :" role="heading" />
+      </Container>
+    );
+  }
+  const { title, description, webRadios } = data.brand;
 
   const updateRadioInformationAndPlay = (activeWebRadioSource, webRadioId) => {
     updateWebRadioInformation(activeWebRadioSource, webRadioId);
@@ -70,8 +81,9 @@ const FipRadio = () => {
             item
             xs={12}
             container
-            alignItems={"center"}
-            justify={"space-between"}
+            spacing={1}
+            alignItems="center"
+            justify="space-between"
           >
             <a
               target="_blank"
@@ -95,39 +107,21 @@ const FipRadio = () => {
             item
             xs={12}
             container
-            spacing={2}
-            alignItems={"center"}
-            justify={"space-between"}
+            spacing={1}
+            alignItems="center"
+            justify="space-between"
           >
-            <Grid
-              item
-              xs={1}
-              container
-              alignItems={"center"}
-              justify={"center"}
-            >
+            <Grid item xs={1} container alignItems="center" justify="center">
               {isPlayerPlaying ? (
-                <PauseTwoToneIcon fontSize={"large"} onClick={pauseAudio} />
+                <PauseTwoToneIcon fontSize="large" onClick={pauseAudio} />
               ) : (
-                <PlayArrowTwoToneIcon fontSize={"large"} onClick={playAudio} />
+                <PlayArrowTwoToneIcon fontSize="large" onClick={playAudio} />
               )}
             </Grid>
-            <Grid
-              xs={1}
-              item
-              container
-              alignItems={"center"}
-              justify={"center"}
-            >
+            <Grid xs={1} item container alignItems="center" justify="center">
               <VolumeDown />
             </Grid>
-            <Grid
-              xs={8}
-              item
-              container
-              justify={"center"}
-              alignContent={"center"}
-            >
+            <Grid xs={8} item container justify="center" alignContent="center">
               <StyledSlider
                 min={0}
                 max={1}
@@ -139,13 +133,7 @@ const FipRadio = () => {
                 activewebradioid={activeWebRadioId}
               />
             </Grid>
-            <Grid
-              xs={1}
-              item
-              container
-              justify={"center"}
-              alignContent={"center"}
-            >
+            <Grid xs={1} item container justify="center" alignContent="center">
               <VolumeUp />
             </Grid>
           </Grid>
@@ -173,6 +161,7 @@ const RadioLogo = styled.img`
 
 const Description = styled.p`
   margin-bottom: 10px;
+  font-size: 20px;
 `;
 
 const StyledSlider = styled(Slider)`
