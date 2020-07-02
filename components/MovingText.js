@@ -22,6 +22,7 @@ const SpanContainer = styled.span`
     bottom: -2em;
     position: relative;
     animation: move-text 0.75s forwards;
+    animation-iteration-count: 100;
     color: ${(props) => props.theme.FIP};
   }
   span:nth-child(2n) {
