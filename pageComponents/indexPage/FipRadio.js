@@ -1,12 +1,12 @@
-import { useRef, useState } from "react";
-import { useQuery } from "@apollo/react-hooks";
 import styled from "styled-components";
+import { useRef, useState, lazy, Suspense } from "react";
+import { useQuery } from "@apollo/react-hooks";
 
 import WebRadios from "./fipRadio/WebRadios";
 import useMetadata from "../../hooks/useMetadata";
 import MovingText from "../../components/MovingText";
 import MetadataContext from "./fipRadio/metadataContext";
-import CurrentlyPlaying from "./fipRadio/CurrentlyPlaying";
+// import CurrentlyPlaying from "./fipRadio/CurrentlyPlaying";
 import FIP_WEB_RADIOS from "./fipRadio/webRadios.query.graphql";
 
 import Grid from "@material-ui/core/Grid";
@@ -15,6 +15,8 @@ import VolumeUp from "@material-ui/icons/VolumeUp";
 import VolumeDown from "@material-ui/icons/VolumeDown";
 import PauseTwoToneIcon from "@material-ui/icons/PauseTwoTone";
 import PlayArrowTwoToneIcon from "@material-ui/icons/PlayArrowTwoTone";
+
+const CurrentlyPlaying = lazy(() => import("./fipRadio/CurrentlyPlaying"));
 
 const FipRadio = () => {
   const metadata = useMetadata();
@@ -55,7 +57,7 @@ const FipRadio = () => {
   if (error) {
     return (
       <Container>
-        <MovingText text="Error :" role="heading" />
+        <MovingText text="ERROR :(" role="heading" />
       </Container>
     );
   }
@@ -76,7 +78,7 @@ const FipRadio = () => {
   return (
     <MetadataContext.Provider value={metadata}>
       <Container>
-        <Grid item sm={6} xs={12}>
+        <Grid item sm={6} xs={12} container>
           <Grid
             item
             xs={12}
@@ -86,6 +88,7 @@ const FipRadio = () => {
             justify="space-between"
           >
             <a
+              rel="noopener"
               target="_blank"
               href="https://www.fip.fr/"
               title="You should definitely give FIP a try"
@@ -137,10 +140,25 @@ const FipRadio = () => {
               <VolumeUp />
             </Grid>
           </Grid>
-          <CurrentlyPlaying
-            webRadioId={activeWebRadioId}
-            isPlayerPlaying={isPlayerPlaying}
-          />
+          <Grid
+            item
+            xs={12}
+            container
+            spacing={1}
+            alignItems="center"
+            justify="space-between"
+          >
+            <CurrentlyPlayingContainer>
+              {isPlayerPlaying && (
+                <Suspense fallback={<></>}>
+                  <CurrentlyPlaying
+                    webRadioId={activeWebRadioId}
+                    isPlayerPlaying={isPlayerPlaying}
+                  />
+                </Suspense>
+              )}
+            </CurrentlyPlayingContainer>
+          </Grid>
         </Grid>
         <Grid item sm={6} xs={12}>
           <WebRadios
@@ -159,9 +177,15 @@ const RadioLogo = styled.img`
   margin-bottom: 10px;
 `;
 
+const CurrentlyPlayingContainer = styled.div`
+  min-height: 110px;
+  width: 100%;
+`;
+
 const Description = styled.p`
+  cursor: default;
+  font-size: 18px;
   margin-bottom: 10px;
-  font-size: 20px;
 `;
 
 const StyledSlider = styled(Slider)`

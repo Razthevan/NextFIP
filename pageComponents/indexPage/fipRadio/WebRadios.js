@@ -36,6 +36,7 @@ const WebRadios = ({ onClick, webRadios, activeWebRadioId }) => {
         ]),
     [webRadios]
   );
+
   const [currentWebRadioIndex, updateCurrentWebRadioIndex] = useState(() =>
     filteredWebRadios.findIndex((webRadio) => webRadio.id === activeWebRadioId)
   );
@@ -54,20 +55,17 @@ const WebRadios = ({ onClick, webRadios, activeWebRadioId }) => {
 
   const onArrowClick = (direction) => {
     const webRadiosArrayLength = filteredWebRadios.length;
-    let newWebRadioIndex;
-    if (direction === LEFT) {
-      newWebRadioIndex =
-        currentWebRadioIndex - 1 < 0
-          ? filteredWebRadios.length - 1
-          : currentWebRadioIndex - 1;
-      updateCurrentWebRadioIndex(newWebRadioIndex);
-    } else {
-      newWebRadioIndex =
-        currentWebRadioIndex + 1 === webRadiosArrayLength
-          ? 0
-          : currentWebRadioIndex + 1;
-      updateCurrentWebRadioIndex(newWebRadioIndex);
-    }
+    const leftIndex =
+      currentWebRadioIndex - 1 < 0
+        ? filteredWebRadios.length - 1
+        : currentWebRadioIndex - 1;
+    const rightIndex =
+      currentWebRadioIndex + 1 === webRadiosArrayLength
+        ? 0
+        : currentWebRadioIndex + 1;
+    const newWebRadioIndex = direction === LEFT ? leftIndex : rightIndex;
+
+    updateCurrentWebRadioIndex(newWebRadioIndex);
   };
 
   const activeWebRadioInformation = filteredWebRadios[currentWebRadioIndex];
@@ -133,8 +131,9 @@ const WebRadioInformationContainer = styled.div`
 `;
 
 const WebRadioTitle = styled.h2`
-  color: ${(props) => props.theme[props.id]};
   margin: 10px 0;
+  cursor: default;
+  color: ${(props) => props.theme[props.id]};
 `;
 
 const WebRadioImage = styled.img`

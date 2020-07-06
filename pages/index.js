@@ -4,15 +4,18 @@ import apolloClient from "../graphql/client";
 import { ApolloProvider } from "@apollo/react-hooks";
 import styled, { ThemeProvider } from "styled-components";
 
-import GithubIcon from "../components/GithubIcon";
 import GlobalStyle from "../components/GlobalStyle";
 import IndexPage from "../pageComponents/IndexPage";
-import LinkedInIcon from "../components/LinkedInIcon";
-import GraphQLIcon from "../components/GraphQLIcon";
-const ChromecastButton = dynamic(
-  () => import("../components/ChromecastButton"),
-  { ssr: false }
-);
+import {
+  GithubIcon,
+  GraphQLIcon,
+  LinkedInIcon,
+} from "../components/socialIcons/index";
+
+// const ChromecastButton = dynamic(
+//   () => import("../components/ChromecastButton"),
+//   { ssr: false }
+// );
 
 import { lightTheme, darkTheme } from "../components/theme";
 import useDarkTheme, { LIGHT_THEME } from "../hooks/useDarkTheme";
@@ -44,30 +47,34 @@ const App = () => {
           href="/favicon-16x16.png"
         />
         <link rel="manifest" href="/site.webmanifest" />
+        <meta
+          name="description"
+          content="FIP Radio Next.JS & GraphQL implementation"
+        ></meta>
         {/* <script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script> */}
       </Head>
       <ApolloProvider client={apolloClient}>
         <ThemeProvider theme={theme}>
           <FixedContainer>
             <RelativeDiv>
-              {/* <ChromecastButton /> */}
               <FlexLink
+                rel="noopener"
                 target="_blank"
-                href={
-                  "https://www.linkedin.com/in/r%C4%83zvan-m%C3%AErleneanu-2a8307135/"
-                }
+                href="https://www.linkedin.com/in/r%C4%83zvan-m%C3%AErleneanu-2a8307135/"
               >
                 <LinkedInIcon />
               </FlexLink>
               <FlexLink
+                rel="noopener"
                 target="_blank"
-                href={"https://github.com/Razthevan/spotifip"}
+                href="https://github.com/Razthevan/spotifip"
               >
                 <GraphQLIcon />
               </FlexLink>
               <FlexLink
+                rel="noopener"
                 target="_blank"
-                href={"https://github.com/Razthevan/NextFIP"}
+                href="https://github.com/Razthevan/NextFIP"
               >
                 <GithubIcon />
               </FlexLink>

@@ -12,21 +12,16 @@ import CURRENTLY_PLAYING_QUERY from "./currentlyPlaying/currentlyPlaying.query.g
 
 const propTypes = {
   webRadioId: PropTypes.string,
-  isPlayerPlaying: PropTypes.bool.isRequired,
 };
 
-const CurrentlyPlaying = ({ webRadioId, isPlayerPlaying }) => {
+const CurrentlyPlaying = ({ webRadioId }) => {
   const { loading, error, data, refetch } = useQuery(CURRENTLY_PLAYING_QUERY, {
     variables: { station: webRadioId ? webRadioId : "FIP" },
-    skip: !isPlayerPlaying || !webRadioId,
   });
 
   const { setCurrentTrackMetadata } = useContext(MetadataContext);
 
   useEffect(() => {
-    if (!isPlayerPlaying) {
-      return;
-    }
     const now = moment();
     // Adding 5 seconds because the song's ending time is not very accurate
     const songEnd = moment.unix(data?.live?.song?.end).add(5, "seconds");
@@ -35,13 +30,13 @@ const CurrentlyPlaying = ({ webRadioId, isPlayerPlaying }) => {
       refetch();
     }, pollingInterval);
     return () => clearTimeout(fetchDataTimeout);
-  }, [data, isPlayerPlaying, refetch]);
+  }, [data, refetch]);
 
   useEffect(() => {
     setCurrentTrackMetadata(data?.live?.song?.track?.metadata);
   }, [data]);
 
-  if (error || loading || !isPlayerPlaying || !webRadioId) {
+  if (error || loading) {
     return <CurrentlyPlayingContainer />;
   }
   const { song } = data.live;
@@ -82,12 +77,10 @@ const TrackTitle = styled.span`
 
 const CurrentlyPlayingContainer = styled.div`
   margin: 10px 0;
-  min-height: 36px;
+  cursor: default;
+  min-height: 40px;
   display: flex;
   align-items: center;
-  @media (max-width: 768px) {
-    margin-bottom: 50px;
-  }
 `;
 
 CurrentlyPlaying.propTypes = propTypes;

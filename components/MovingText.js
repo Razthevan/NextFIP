@@ -20,10 +20,11 @@ const SpanContainer = styled.span`
     opacity: 0;
     margin: 2px;
     bottom: -2em;
+    cursor: default;
     position: relative;
+    color: ${(props) => props.theme.FIP};
     animation: move-text 0.75s forwards;
     animation-iteration-count: 100;
-    color: ${(props) => props.theme.FIP};
   }
   span:nth-child(2n) {
     color: ${(props) => {
@@ -53,12 +54,13 @@ const SpanContainer = styled.span`
   }
   @keyframes move-text {
     0% {
-      bottom: -0.2em;
+      bottom: -0.1em;
       opacity: 1;
     }
 
     50% {
-      bottom: 0.2em;
+      bottom: 0.1em;
+      opacity: 1;
     }
 
     100% {
