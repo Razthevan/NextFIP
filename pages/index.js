@@ -44,7 +44,7 @@ const App = () => {
           href="/favicon-16x16.png"
         />
         <link rel="manifest" href="/site.webmanifest" />
-        <script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
+        {/* <script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script> */}
       </Head>
       <ApolloProvider client={apolloClient}>
         <ThemeProvider theme={theme}>
