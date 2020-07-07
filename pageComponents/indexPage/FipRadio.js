@@ -3,18 +3,14 @@ import { useRef, useState, lazy, Suspense } from "react";
 import { useQuery } from "@apollo/react-hooks";
 
 import WebRadios from "./fipRadio/WebRadios";
+import Description from "./fipRadio/Description";
 import useMetadata from "../../hooks/useMetadata";
 import MovingText from "../../components/MovingText";
+import PlayerControls from "./fipRadio/PlayerControls";
 import MetadataContext from "./fipRadio/metadataContext";
-// import CurrentlyPlaying from "./fipRadio/CurrentlyPlaying";
 import FIP_WEB_RADIOS from "./fipRadio/webRadios.query.graphql";
 
 import Grid from "@material-ui/core/Grid";
-import Slider from "@material-ui/core/Slider";
-import VolumeUp from "@material-ui/icons/VolumeUp";
-import VolumeDown from "@material-ui/icons/VolumeDown";
-import PauseTwoToneIcon from "@material-ui/icons/PauseTwoTone";
-import PlayArrowTwoToneIcon from "@material-ui/icons/PlayArrowTwoTone";
 
 const CurrentlyPlaying = lazy(() => import("./fipRadio/CurrentlyPlaying"));
 
@@ -75,27 +71,15 @@ const FipRadio = () => {
   const playAudio = () => audioElementRef.current.play();
   const pauseAudio = () => audioElementRef.current.pause();
   const togglePlayerStatus = (status) => updateIsPlayerPlaying(status);
+  const onVolumeChange = (_, value) => (audioElementRef.current.volume = value);
   return (
     <MetadataContext.Provider value={metadata}>
       <Container>
         <Grid item sm={6} xs={12} container>
-          <Grid
-            item
-            xs={12}
-            container
-            spacing={1}
-            alignItems="center"
-            justify="space-between"
-          >
-            <a
-              rel="noopener"
-              target="_blank"
-              href="https://www.fip.fr/"
-              title="You should definitely give FIP a try"
-            >
-              <RadioLogo src="/fip.svg" alt={title} />
-            </a>
-            <Description>{description}</Description>
+          <Row>
+            <Description title={title} description={description} />
+          </Row>
+          <Row>
             <audio
               ref={audioElementRef}
               src={activeWebRadioSource}
@@ -105,49 +89,16 @@ const FipRadio = () => {
               Your browser does not support the
               <code>audio</code> element.
             </audio>
-          </Grid>
-          <Grid
-            item
-            xs={12}
-            container
-            spacing={1}
-            alignItems="center"
-            justify="space-between"
-          >
-            <Grid item xs={1} container alignItems="center" justify="center">
-              {isPlayerPlaying ? (
-                <PauseTwoToneIcon fontSize="large" onClick={pauseAudio} />
-              ) : (
-                <PlayArrowTwoToneIcon fontSize="large" onClick={playAudio} />
-              )}
-            </Grid>
-            <Grid xs={1} item container alignItems="center" justify="center">
-              <VolumeDown />
-            </Grid>
-            <Grid xs={8} item container justify="center" alignContent="center">
-              <StyledSlider
-                min={0}
-                max={1}
-                step={0.1}
-                defaultValue={1}
-                onChange={(_, value) => {
-                  audioElementRef.current.volume = value;
-                }}
-                activewebradioid={activeWebRadioId}
-              />
-            </Grid>
-            <Grid xs={1} item container justify="center" alignContent="center">
-              <VolumeUp />
-            </Grid>
-          </Grid>
-          <Grid
-            item
-            xs={12}
-            container
-            spacing={1}
-            alignItems="center"
-            justify="space-between"
-          >
+
+            <PlayerControls
+              playAudio={playAudio}
+              pauseAudio={pauseAudio}
+              onVolumeChange={onVolumeChange}
+              isPlayerPlaying={isPlayerPlaying}
+              activeWebRadioId={activeWebRadioId}
+            />
+          </Row>
+          <Row>
             <CurrentlyPlayingContainer>
               {isPlayerPlaying && (
                 <Suspense fallback={<></>}>
@@ -158,7 +109,7 @@ const FipRadio = () => {
                 </Suspense>
               )}
             </CurrentlyPlayingContainer>
-          </Grid>
+          </Row>
         </Grid>
         <Grid item sm={6} xs={12}>
           <WebRadios
@@ -172,32 +123,9 @@ const FipRadio = () => {
   );
 };
 
-const RadioLogo = styled.img`
-  width: 25%;
-  margin-bottom: 10px;
-`;
-
 const CurrentlyPlayingContainer = styled.div`
   min-height: 110px;
   width: 100%;
-`;
-
-const Description = styled.p`
-  cursor: default;
-  font-size: 18px;
-  margin-bottom: 10px;
-`;
-
-const StyledSlider = styled(Slider)`
-  > .MuiSlider-rail {
-    background-color: ${(props) => props.theme[props.activewebradioid]};
-  }
-  > .MuiSlider-track {
-    background-color: ${(props) => props.theme[props.activewebradioid]};
-  }
-  > .MuiSlider-thumb {
-    background-color: ${(props) => props.theme[props.activewebradioid]};
-  }
 `;
 
 const Container = ({ children }) => (
@@ -214,6 +142,19 @@ const Container = ({ children }) => (
     >
       {children}
     </Grid>
+  </Grid>
+);
+
+const Row = ({ children }) => (
+  <Grid
+    item
+    xs={12}
+    container
+    spacing={1}
+    alignItems="center"
+    justify="space-between"
+  >
+    {children}
   </Grid>
 );
 

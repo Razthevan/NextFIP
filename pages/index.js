@@ -55,8 +55,8 @@ const App = () => {
       </Head>
       <ApolloProvider client={apolloClient}>
         <ThemeProvider theme={theme}>
-          <FixedContainer>
-            <RelativeDiv>
+          <StickyHeader>
+            <SocialLinks>
               <FlexLink
                 rel="noopener"
                 target="_blank"
@@ -81,8 +81,8 @@ const App = () => {
               <ThemeSwitcher onClick={toggleThemeMode}>
                 {isLightTheme ? "☀️" : "🌙"}
               </ThemeSwitcher>
-            </RelativeDiv>
-          </FixedContainer>
+            </SocialLinks>
+          </StickyHeader>
           <GlobalStyle />
           <IndexPage />
         </ThemeProvider>
@@ -97,24 +97,27 @@ const Container = styled.div`
 `;
 
 const ThemeSwitcher = styled.span`
+  margin: 10px;
   cursor: pointer;
 `;
 
-const RelativeDiv = styled.div`
+const SocialLinks = styled.div`
+  width: 50%;
   display: flex;
-  position: relative;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
 `;
 
-const FixedContainer = styled.div`
+const StickyHeader = styled.div`
   top: 10px;
-  right: 30px;
-  width: 150px;
-  position: fixed;
+  width: auto;
+  position: sticky;
+  display: flex;
+  justify-content: flex-end;
 `;
 
 const FlexLink = styled.a`
+  margin: 10px;
   display: flex;
   align-items: center;
 `;

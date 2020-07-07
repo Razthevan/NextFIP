@@ -9,6 +9,7 @@ import MetadataContext from "./metadataContext";
 import SpotifyLink from "./currentlyPlaying/SpotifyLink";
 
 import CURRENTLY_PLAYING_QUERY from "./currentlyPlaying/currentlyPlaying.query.graphql";
+import CurrentlyPlayingInformation from "./currentlyPlaying/CurrentlyPlayingInformation";
 
 const propTypes = {
   webRadioId: PropTypes.string,
@@ -16,7 +17,7 @@ const propTypes = {
 
 const CurrentlyPlaying = ({ webRadioId }) => {
   const { loading, error, data, refetch } = useQuery(CURRENTLY_PLAYING_QUERY, {
-    variables: { station: webRadioId ? webRadioId : "FIP" },
+    variables: { station: webRadioId },
   });
 
   const { setCurrentTrackMetadata } = useContext(MetadataContext);
@@ -42,38 +43,20 @@ const CurrentlyPlaying = ({ webRadioId }) => {
   const { song } = data.live;
 
   if (!song) {
-    return <CurrentlyPlayingContainer />;
+    return (
+      <CurrentlyPlayingContainer>
+        Could not identify song
+      </CurrentlyPlayingContainer>
+    );
   }
 
   return (
     <CurrentlyPlayingContainer>
-      <p>
-        Currently playing{" "}
-        <TrackTitle id={webRadioId}>{song.track.title}</TrackTitle> by
-        {song.track.mainArtists.map((artist) => (
-          <span key={artist}> {artist}</span>
-        ))}{" "}
-        on{" "}
-        <WebRadioName id={webRadioId}>
-          {convertWebRadioIdToName(webRadioId)}
-        </WebRadioName>
-      </p>
+      <CurrentlyPlayingInformation song={song} webRadioId={webRadioId} />
       <SpotifyLink spotifyLink={song.track?.metadata?.spotifyUrl} />
     </CurrentlyPlayingContainer>
   );
 };
-
-const convertWebRadioIdToName = (webRadioId) =>
-  webRadioId.toLowerCase().split("_").join(" ");
-
-const WebRadioName = styled.span`
-  color: ${(props) => props.theme[props.id]};
-  text-transform: capitalize;
-`;
-
-const TrackTitle = styled.span`
-  color: ${(props) => props.theme[props.id]};
-`;
 
 const CurrentlyPlayingContainer = styled.div`
   margin: 10px 0;
