@@ -39,7 +39,7 @@ const PlayerControls = ({
         min={0}
         max={1}
         step={0.1}
-        defaultValue={1}
+        defaultValue={0.3}
         onChange={onVolumeChange}
         activewebradioid={activeWebRadioId}
       />

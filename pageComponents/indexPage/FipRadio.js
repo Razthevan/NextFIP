@@ -17,6 +17,7 @@ const CurrentlyPlaying = lazy(() => import("./fipRadio/CurrentlyPlaying"));
 const FipRadio = () => {
   const metadata = useMetadata();
   const audioElementRef = useRef(null);
+  const [volume, setVolume] = useState(0.3);
   const [loading, updateLoadingStatus] = useState(true);
   const [activeWebRadioId, setActiveWebRadioId] = useState(null);
   const [isPlayerPlaying, updateIsPlayerPlaying] = useState(false);
@@ -68,10 +69,17 @@ const FipRadio = () => {
     return () => clearTimeout(playAudioTimeout);
   };
 
-  const playAudio = () => audioElementRef.current.play();
+  const playAudio = () => {
+    audioElementRef.current.volume = volume;
+    audioElementRef.current.play();
+  };
   const pauseAudio = () => audioElementRef.current.pause();
   const togglePlayerStatus = (status) => updateIsPlayerPlaying(status);
-  const onVolumeChange = (_, value) => (audioElementRef.current.volume = value);
+  const onVolumeChange = (_, value) => {
+    audioElementRef.current.volume = value;
+    setVolume(value);
+  };
+
   return (
     <MetadataContext.Provider value={metadata}>
       <Container>
