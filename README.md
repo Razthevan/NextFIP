@@ -13,7 +13,7 @@ Using a custom Apollo Server to fetch data from both FIP and Spotify. The server
  - [x] Use Apollo Federation to fetch data from both FIP and Spotify APIs;
  - [ ] Integrate Youtube API;
  - [ ]  Make the project [Chromecast](https://support.google.com/chromecast/answer/3265953?hl=en) enabled;
- - [ ] Cast the currently playing song's music video on the TV. 
+ - [ ] Cast the currently playing song's video on the TV. 
 
 ## Getting Started
 
