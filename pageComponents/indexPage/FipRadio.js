@@ -6,6 +6,7 @@ import WebRadios from "./fipRadio/WebRadios";
 import Description from "./fipRadio/Description";
 import useMetadata from "../../hooks/useMetadata";
 import MovingText from "../../components/MovingText";
+import VideoComponent from "./fipRadio/VideoComponent";
 import PlayerControls from "./fipRadio/PlayerControls";
 import MetadataContext from "./fipRadio/metadataContext";
 import FIP_WEB_RADIOS from "./fipRadio/webRadios.query.graphql";
@@ -87,6 +88,7 @@ const FipRadio = () => {
           <Row>
             <Description title={title} description={description} />
           </Row>
+
           <Row>
             <audio
               ref={audioElementRef}
@@ -122,9 +124,13 @@ const FipRadio = () => {
         <Grid item sm={6} xs={12}>
           <WebRadios
             webRadios={webRadios}
+            isPlayerPlaying={isPlayerPlaying}
             activeWebRadioId={activeWebRadioId}
             onClick={updateRadioInformationAndPlay}
           />
+        </Grid>
+        <Grid item container xs={12}>
+          <VideoComponent youTubeId={metadata?.metadata?.youTubeId} />
         </Grid>
       </Container>
     </MetadataContext.Provider>

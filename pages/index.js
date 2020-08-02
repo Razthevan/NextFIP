@@ -1,8 +1,10 @@
+import React from "react";
+
 import Head from "next/head";
-import dynamic from "next/dynamic";
 import apolloClient from "../graphql/client";
 import { ApolloProvider } from "@apollo/react-hooks";
 import styled, { ThemeProvider } from "styled-components";
+import whyDidYouRender from "@welldone-software/why-did-you-render";
 
 import GlobalStyle from "../components/GlobalStyle";
 import IndexPage from "../pageComponents/IndexPage";
@@ -11,11 +13,6 @@ import {
   GraphQLIcon,
   LinkedInIcon,
 } from "../components/socialIcons/index";
-
-// const ChromecastButton = dynamic(
-//   () => import("../components/ChromecastButton"),
-//   { ssr: false }
-// );
 
 import { lightTheme, darkTheme } from "../components/theme";
 import useDarkTheme, { LIGHT_THEME } from "../hooks/useDarkTheme";
@@ -51,7 +48,6 @@ const App = () => {
           name="description"
           content="FIP Radio Next.JS & GraphQL implementation"
         ></meta>
-        {/* <script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script> */}
       </Head>
       <ApolloProvider client={apolloClient}>
         <ThemeProvider theme={theme}>
@@ -121,5 +117,13 @@ const FlexLink = styled.a`
   display: flex;
   align-items: center;
 `;
+
+if (process.env.NODE_ENV === "development") {
+  if (typeof window !== "undefined") {
+    whyDidYouRender(React, {
+      trackAllPureComponents: true,
+    });
+  }
+}
 
 export default App;

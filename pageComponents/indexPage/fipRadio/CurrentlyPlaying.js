@@ -16,13 +16,16 @@ const propTypes = {
 };
 
 const CurrentlyPlaying = ({ webRadioId }) => {
-  const { loading, error, data, refetch } = useQuery(CURRENTLY_PLAYING_QUERY, {
+  const { loading, data, refetch } = useQuery(CURRENTLY_PLAYING_QUERY, {
     variables: { station: webRadioId },
   });
 
   const { setCurrentTrackMetadata } = useContext(MetadataContext);
 
   useEffect(() => {
+    if (!data) {
+      return;
+    }
     const now = moment();
     // Adding 5 seconds because the song's ending time is not very accurate
     const songEnd = moment.unix(data?.live?.song?.end).add(10, "seconds");
@@ -37,18 +40,18 @@ const CurrentlyPlaying = ({ webRadioId }) => {
     setCurrentTrackMetadata(data?.live?.song?.track?.metadata);
   }, [data]);
 
-  if (error || loading) {
+  if (loading) {
     return <CurrentlyPlayingContainer />;
   }
-  const { song } = data.live;
 
-  if (!song) {
+  if (!data?.live?.song) {
     return (
       <CurrentlyPlayingContainer>
-        Could not identify song
+        Could not retrieve information related to the currently playing song.
       </CurrentlyPlayingContainer>
     );
   }
+  const { song } = data?.live;
 
   return (
     <CurrentlyPlayingContainer>

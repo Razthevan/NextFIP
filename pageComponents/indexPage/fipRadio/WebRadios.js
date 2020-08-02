@@ -12,12 +12,18 @@ import MetadataContext from "./metadataContext";
 const propTypes = {
   onClick: PropTypes.func,
   webRadios: PropTypes.array,
+  isPlayerPlaying: PropTypes.bool,
   activeWebRadioId: PropTypes.string,
 };
 
 const LEFT = "left";
 
-const WebRadios = ({ onClick, webRadios, activeWebRadioId }) => {
+const WebRadios = ({
+  onClick,
+  webRadios,
+  isPlayerPlaying,
+  activeWebRadioId,
+}) => {
   const { metadata, setCurrentTrackMetadata } = useContext(MetadataContext);
 
   // FIP Metal fails to play
@@ -83,7 +89,7 @@ const WebRadios = ({ onClick, webRadios, activeWebRadioId }) => {
     <Grid container direction={"row"} alignItems={"center"} spacing={3}>
       <Grid item xs={1} container justify={"center"} alignContent={"center"}>
         <ChevronLeftSharpIcon
-          style={{ fontSize: 60 }}
+          style={arrowsStyle}
           onClick={() => onArrowClick(LEFT)}
         />
       </Grid>
@@ -94,6 +100,13 @@ const WebRadios = ({ onClick, webRadios, activeWebRadioId }) => {
               src={webRadioImageURL}
               alt={activeWebRadioInformation.title}
               onClick={() => {
+                if (
+                  isPlayerPlaying &&
+                  filteredWebRadios[currentWebRadioIndex].id ===
+                    activeWebRadioId
+                ) {
+                  return;
+                }
                 setCurrentTrackMetadata(null);
                 onClick(
                   activeWebRadioInformation.liveStream,
@@ -109,13 +122,15 @@ const WebRadios = ({ onClick, webRadios, activeWebRadioId }) => {
       </Grid>
       <Grid item xs={1} container justify={"center"} alignContent={"center"}>
         <ChevronRightSharpIcon
-          style={{ fontSize: 60 }}
+          style={arrowsStyle}
           onClick={() => onArrowClick()}
         />
       </Grid>
     </Grid>
   );
 };
+
+const arrowsStyle = { fontSize: 60 };
 
 const StyledCard = styled(Card)`
   color: ${(props) => props.theme.text} !important;
@@ -145,5 +160,5 @@ const WebRadioImage = styled.img`
 `;
 
 WebRadios.propTypes = propTypes;
-
+WebRadios.whyDidYouRender = true;
 export default withTheme(WebRadios);

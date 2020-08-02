@@ -23,6 +23,7 @@ export default gql`
           metadata {
             name
             spotifyUrl
+            youTubeId
             albumInfo {
               albumName
               albumImages {
