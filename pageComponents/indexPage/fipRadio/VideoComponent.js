@@ -20,7 +20,7 @@ export default VideoComponent;
 const FullWidthDiv = styled.div`
   width: 100%;
   margin-top: 10px;
-  min-height: 420px;
+  min-height: 410px;
   border: ${(props) => (props.noResult ? null : "5px solid #ff0000")};
 `;
 

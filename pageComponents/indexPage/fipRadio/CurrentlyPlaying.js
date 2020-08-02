@@ -18,6 +18,7 @@ const propTypes = {
 const CurrentlyPlaying = ({ webRadioId }) => {
   const { loading, data, refetch } = useQuery(CURRENTLY_PLAYING_QUERY, {
     variables: { station: webRadioId },
+    fetchPolicy: "no-cache",
   });
 
   const { setCurrentTrackMetadata } = useContext(MetadataContext);
