@@ -81,7 +81,7 @@ const WebRadios = ({
   }
 
   const webRadioImageURL =
-    activeWebRadioId === activeWebRadioInformation.id && metadata
+    activeWebRadioId === activeWebRadioInformation.id && metadata?.albumInfo
       ? metadata?.albumInfo?.albumImages[1].url
       : `${activeWebRadioInformation.id}.jpg`;
 
