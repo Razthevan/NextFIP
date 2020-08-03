@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect, useContext } from "react";
+import { useMemo, useState, useLayoutEffect, useContext } from "react";
 import PropTypes from "prop-types";
 import styled, { withTheme } from "styled-components";
 
@@ -47,7 +47,7 @@ const WebRadios = ({
     filteredWebRadios.findIndex((webRadio) => webRadio.id === activeWebRadioId)
   );
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!activeWebRadioId) {
       return;
     }
