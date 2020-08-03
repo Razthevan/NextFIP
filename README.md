@@ -11,7 +11,7 @@ Using a custom Apollo Server to fetch data from both FIP and Spotify. The server
 
  - [x] Build a basic web radio interface;
  - [x] Use Apollo Federation to fetch data from both FIP and Spotify APIs;
- - [ ] Integrate Youtube API;
+ - [x] Integrate Youtube API;
  - [ ]  Make the project [Chromecast](https://support.google.com/chromecast/answer/3265953?hl=en) enabled;
  - [ ] Cast the currently playing song's video on the TV. 
 
