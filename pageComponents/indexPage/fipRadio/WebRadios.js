@@ -1,4 +1,4 @@
-import { useMemo, useState, useLayoutEffect, useContext } from "react";
+import { useMemo, useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 import styled, { withTheme } from "styled-components";
 
@@ -13,7 +13,7 @@ const propTypes = {
   onClick: PropTypes.func,
   webRadios: PropTypes.array,
   isPlayerPlaying: PropTypes.bool,
-  activeWebRadioId: PropTypes.string,
+  playingWebRadioId: PropTypes.string,
 };
 
 const LEFT = "left";
@@ -22,9 +22,18 @@ const WebRadios = ({
   onClick,
   webRadios,
   isPlayerPlaying,
-  activeWebRadioId,
+  playingWebRadioId,
 }) => {
-  const { metadata, setCurrentTrackMetadata } = useContext(MetadataContext);
+  const { metadata } = useContext(MetadataContext);
+  const [albumCover, updateAlbumCover] = useState(
+    metadata?.albumInfo && metadata?.albumInfo?.albumImages[1].url
+  );
+
+  useEffect(() => {
+    updateAlbumCover(
+      metadata?.albumInfo && metadata?.albumInfo?.albumImages[1].url
+    );
+  }, [metadata]);
 
   // FIP Metal fails to play
   const filteredWebRadios = useMemo(
@@ -44,20 +53,8 @@ const WebRadios = ({
   );
 
   const [currentWebRadioIndex, updateCurrentWebRadioIndex] = useState(() =>
-    filteredWebRadios.findIndex((webRadio) => webRadio.id === activeWebRadioId)
+    filteredWebRadios.findIndex((webRadio) => webRadio.id === playingWebRadioId)
   );
-
-  useLayoutEffect(() => {
-    if (!activeWebRadioId) {
-      return;
-    }
-
-    updateCurrentWebRadioIndex(
-      filteredWebRadios.findIndex(
-        (webRadio) => webRadio.id === activeWebRadioId
-      )
-    );
-  }, [activeWebRadioId]);
 
   const onArrowClick = (direction) => {
     const webRadiosArrayLength = filteredWebRadios.length;
@@ -74,20 +71,36 @@ const WebRadios = ({
     updateCurrentWebRadioIndex(newWebRadioIndex);
   };
 
-  const activeWebRadioInformation = filteredWebRadios[currentWebRadioIndex];
+  const currentlySelectedRadioInformation =
+    filteredWebRadios[currentWebRadioIndex];
 
-  if (!activeWebRadioInformation) {
+  if (!currentlySelectedRadioInformation) {
     return null;
   }
 
   const webRadioImageURL =
-    activeWebRadioId === activeWebRadioInformation.id && metadata?.albumInfo
-      ? metadata?.albumInfo?.albumImages[1].url
-      : `${activeWebRadioInformation.id}.jpg`;
+    playingWebRadioId === currentlySelectedRadioInformation.id && albumCover
+      ? albumCover
+      : `${currentlySelectedRadioInformation.id}.jpg`;
+
+  const onWebRadioCardClick = () => {
+    const isWebRadioAlreadyPlaying =
+      isPlayerPlaying &&
+      currentlySelectedRadioInformation.id === playingWebRadioId;
+
+    if (isWebRadioAlreadyPlaying) {
+      return;
+    }
+    updateAlbumCover(null);
+    onClick(
+      currentlySelectedRadioInformation.liveStream,
+      currentlySelectedRadioInformation.id
+    );
+  };
 
   return (
-    <Grid container direction={"row"} alignItems={"center"} spacing={3}>
-      <Grid item xs={1} container justify={"center"} alignContent={"center"}>
+    <Grid container direction="row" alignItems="center" spacing={3}>
+      <Grid item xs={1} container justify="center" alignContent="center">
         <ChevronLeftSharpIcon
           style={arrowsStyle}
           onClick={() => onArrowClick(LEFT)}
@@ -98,33 +111,17 @@ const WebRadios = ({
           <WebRadioInformationContainer>
             <WebRadioImage
               src={webRadioImageURL}
-              alt={activeWebRadioInformation.title}
-              onClick={() => {
-                if (
-                  isPlayerPlaying &&
-                  filteredWebRadios[currentWebRadioIndex].id ===
-                    activeWebRadioId
-                ) {
-                  return;
-                }
-                setCurrentTrackMetadata(null);
-                onClick(
-                  activeWebRadioInformation.liveStream,
-                  activeWebRadioInformation.id
-                );
-              }}
+              alt={currentlySelectedRadioInformation.title}
+              onClick={onWebRadioCardClick}
             />
-            <WebRadioTitle id={activeWebRadioInformation.id}>
-              {activeWebRadioInformation.title}
+            <WebRadioTitle id={currentlySelectedRadioInformation.id}>
+              {currentlySelectedRadioInformation.title}
             </WebRadioTitle>
           </WebRadioInformationContainer>
         </StyledCard>
       </Grid>
-      <Grid item xs={1} container justify={"center"} alignContent={"center"}>
-        <ChevronRightSharpIcon
-          style={arrowsStyle}
-          onClick={() => onArrowClick()}
-        />
+      <Grid item xs={1} container justify="center" alignContent="center">
+        <ChevronRightSharpIcon style={arrowsStyle} onClick={onArrowClick} />
       </Grid>
     </Grid>
   );
@@ -133,8 +130,8 @@ const WebRadios = ({
 const arrowsStyle = { fontSize: 60 };
 
 const StyledCard = styled(Card)`
-  color: ${(props) => props.theme.text} !important;
   padding: 10px;
+  color: ${(props) => props.theme.text} !important;
   background-color: ${(props) => props.theme.body} !important;
 `;
 
@@ -160,5 +157,4 @@ const WebRadioImage = styled.img`
 `;
 
 WebRadios.propTypes = propTypes;
-WebRadios.whyDidYouRender = true;
 export default withTheme(WebRadios);

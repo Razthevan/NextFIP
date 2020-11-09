@@ -125,7 +125,7 @@ const FipRadio = () => {
           <WebRadios
             webRadios={webRadios}
             isPlayerPlaying={isPlayerPlaying}
-            activeWebRadioId={activeWebRadioId}
+            playingWebRadioId={activeWebRadioId}
             onClick={updateRadioInformationAndPlay}
           />
         </Grid>

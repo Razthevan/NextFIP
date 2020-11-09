@@ -120,9 +120,7 @@ const FlexLink = styled.a`
 
 if (process.env.NODE_ENV === "development") {
   if (typeof window !== "undefined") {
-    whyDidYouRender(React, {
-      trackAllPureComponents: true,
-    });
+    whyDidYouRender(React);
   }
 }
 

@@ -28,7 +28,7 @@ const CurrentlyPlaying = ({ webRadioId }) => {
       return;
     }
     const now = moment();
-    // Adding 5 seconds because the song's ending time is not very accurate
+    // Adding 10 seconds because the song's ending time is not very accurate
     const songEnd = moment.unix(data?.live?.song?.end).add(10, "seconds");
     const pollingInterval = songEnd.diff(now, "milliseconds");
     const fetchDataTimeout = setTimeout(() => {
